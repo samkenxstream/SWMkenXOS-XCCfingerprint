@@ -1,0 +1,82 @@
+# This workflow will trigger Datadog Synthetic tests within your Datadog organisation
+# For more information on running Synthetic tests within your GitHub workflows see: https://docs.datadoghq.com/synthetics/cicd_integrations/github_actions/
+
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
+
+# To get started:
+
+# 1. Add your Datadog API (DD_API_KEY) and Application Key (DD_APP_KEY) as secrets to your GitHub repository. For more information, see: https://docs.datadoghq.com/account_management/api-app-keys/.
+# 2. Start using the action within your workflow
+
+name: Run Datadog Synthetic tests
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    # Run Synthetic tests within your GitHub workflow.
+    # For additional configuration options visit the action within the marketplace: https://github.com/marketplace/actions/datadog-synthetics-ci
+    - name: Run Datadog Synthetic tests
+      uses: DataDog/synthetics-ci-github-action@2b56dc0cca9daa14ab69c0d1d6844296de8f941e
+      with:
+        api_key: ${{secrets.DD_API_KEY}}
+        app_key: ${{secrets.DD_APP_KEY}}
+        test_search_query: 'tag:e2e-tests' #Modify this tag to suit your tagging strategy
+    - name: Setup Java JDK
+
+  uses: actions/setup-java@v1.4.4
+
+  with:
+
+    # The Java version to make available on the path. Takes a whole or semver Java version, or 1.x syntax (e.g. 1.8 => Java 8.x). Early access versions can be specified in the form of e.g. 14-ea, 14.0.0-ea, or 14.0.0-ea.28
+
+    java-version: 
+
+    # The package type (jre, jdk, jdk+fx)
+
+    java-package: # optional, default is jdk
+
+    # The architecture (x86, x64) of the package.
+
+    architecture: # optional, default is x64
+
+    # Path to where the compressed JDK is located. The path could be in your source repository or a local path on the agent.
+
+    jdkFile: # optional
+
+    # ID of the distributionManagement repository in the pom.xml file. Default is `github`
+
+    server-id: # optional, default is github
+
+    # Environment variable name for the username for authentication to the Apache Maven repository. Default is $GITHUB_ACTOR
+
+    server-username: # optional, default is GITHUB_ACTOR
+
+    # Environment variable name for password or token for authentication to the Apache Maven repository. Default is $GITHUB_TOKEN
+
+    server-password: # optional, default is GITHUB_TOKEN
+
+    # Path to where the settings.xml file will be written. Default is ~/.m2.
+
+    settings-path: # optional
+
+    # GPG private key to import. Default is empty string.
+
+    gpg-private-key: # optional
+
+    # Environment variable name for the GPG private key passphrase. Default is $GPG_PASSPHRASE.
+
+    gpg-passphrase: # optional
+   
